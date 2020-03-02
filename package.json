@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/snaphunters/snapi#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "eslint-plugin-jest": "^23.8.1",
     "express": "^4.17.1",
     "jest": "^25.1.0",
