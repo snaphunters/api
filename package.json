@@ -1,0 +1,31 @@
+{
+  "name": "snapi",
+  "version": "1.0.0",
+  "description": "## Story wall",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snaphunters/snapi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/snaphunters/snapi/issues"
+  },
+  "homepage": "https://github.com/snaphunters/snapi#readme",
+  "dependencies": {
+    "eslint-plugin-jest": "^23.8.1",
+    "express": "^4.17.1",
+    "jest": "^25.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1"
+  }
+}
