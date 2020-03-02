@@ -1,7 +1,6 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
-const { v4: uuidv4 } = require("uuid");
 
 const Article = require("../models/article.model");
 const app = require("../app");
@@ -37,7 +36,6 @@ describe("article.route.js", () => {
 
   it("POST /articles should return message 201 created and the article posted", async () => {
     const mockArticle = {
-      id: uuidv4(),
       title: "This is a test article"
     };
     const { body } = await request(app)
@@ -48,9 +46,7 @@ describe("article.route.js", () => {
   });
 
   it("POST / should return message 400 as validation error when title is not given", async () => {
-    const mockArticle = {
-      id: uuidv4()
-    };
+    const mockArticle = {};
     const { body: err } = await request(app)
       .post("/articles")
       .send(mockArticle)
@@ -62,7 +58,6 @@ describe("article.route.js", () => {
 
   it("POST / should return 500 as internal server error when server is not responding", async () => {
     const mockArticle = {
-      id: uuidv4(),
       title: "This is a test article"
     };
     const origFunction = Article.init;
