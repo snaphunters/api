@@ -7,7 +7,7 @@ app.use(express.json());
 app.use("/articles", articleRouter);
 
 app.get("/", (req, res) => {
-  res.send({
+  res.json({
     0: "GET /",
     1: "POST /articles"
   });
