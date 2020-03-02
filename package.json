@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --watchAll",
     "test:coverage": "jest --coverage --watchAll=false",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "lint": "eslint src/"
   },
   "repository": {
     "type": "git",
