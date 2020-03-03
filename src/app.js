@@ -5,7 +5,8 @@ const articleRouter = require("./routes/article.route");
 const cors = require("cors");
 
 const corsOption = {
-  origin: process.env.EDITOR_HEROKU
+  credentials: true,
+  origin: [process.env.EDITOR_HEROKU, "http://localhost:3000"]
 };
 
 app.use(express.json());
