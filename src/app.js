@@ -1,8 +1,16 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const articleRouter = require("./routes/article.route");
+const cors = require("cors");
+
+const corsOption = {
+  origin: process.env.EDITOR_HEROKU
+};
 
 app.use(express.json());
+
+app.use(cors(corsOption));
 
 app.use("/articles", articleRouter);
 
