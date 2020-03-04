@@ -56,7 +56,7 @@ describe("article.route.js", () => {
     });
   });
 
-  it("POST / should return 500 as internal server error when server is not responding", async () => {
+  it("POST / should return message 500 as internal server error when server is not responding", async () => {
     const mockArticle = {
       title: "This is a test article"
     };
@@ -73,5 +73,31 @@ describe("article.route.js", () => {
       error: "Internal server error."
     });
     Article.init = origFunction;
+  });
+  it("GET /articles should return message 200 ok and all the articles posted", async () => {
+    const mockArticles = [
+      {
+        title: "This is article one"
+      },
+      {
+        title: "This is article two"
+      }
+    ];
+    const origFunction = Article.find;
+    Article.find = jest.fn();
+    Article.find.mockImplementationOnce(() => {
+      return mockArticles;
+    });
+    const { body: articleCollection } = await request(app)
+      .get("/articles")
+      .expect(200);
+    expect(articleCollection).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(mockArticles[0]),
+        expect.objectContaining(mockArticles[1])
+      ])
+    );
+
+    Article.find = origFunction;
   });
 });

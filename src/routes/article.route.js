@@ -15,6 +15,14 @@ router.post(
   })
 );
 
+router.get(
+  "/",
+  wrapAsync(async (req, res, next) => {
+    const articleCollection = await Article.find();
+    res.status(200).send(articleCollection);
+  })
+);
+
 router.use((err, req, res, next) => {
   if (err.name === "ValidationError") {
     err.statusCode = 400;

@@ -41,6 +41,7 @@
     "testEnvironment": "node",
     "collectCoverageFrom": [
       "src/*.js",
+      "src/routes/*.js",
       "!src/index.js"
     ],
     "coveragePathIgnorePatterns": [
