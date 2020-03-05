@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  test:
+  unit-test:
     working_directory: ~/app
     docker:
       - image: circleci/node:12.16
@@ -16,25 +16,35 @@ jobs:
           paths:
             - ./node_modules
       - run:
-          name: unit-test
+          name: test-coverage
           command: "npm run test:coverage"
       - run:
           name: linting
           command: "npm run lint"
-  deploy:
+  deploy-testenv:
     working_directory: ~/app
     docker:
       - image: buildpack-deps:trusty
     steps:
       - checkout
       - run:
-          name: Deploy Editor Master to Heroku
+          name: Deploy Snapi Master to Heroku testenv
+          command: git push https://heroku:$SNAPI_HEROKU_TESTENV_API_KEY@git.heroku.com/$SNAPI_HEROKU_TESTENV.git master
+  deploy-prod:
+    working_directory: ~/app
+    docker:
+      - image: buildpack-deps:trusty
+    steps:
+      - checkout
+      - run:
+          name: Deploy Snapi Master to Heroku
           command: git push https://heroku:$SNAPI_HEROKU_API_KEY@git.heroku.com/$SNAPI_HEROKU.git master
 workflows:
   version: 2
   build:
     jobs:
-      - test
-      - deploy:
+      - unit-test
+      - deploy-testenv
+      - deploy-prod:
           requires:
-            - test
+            - unit-test
