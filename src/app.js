@@ -6,7 +6,7 @@ const cors = require("cors");
 
 const corsOption = {
   credentials: true,
-  origin: process.env.EDITOR_HEROKU
+  origin: [process.env.EDITOR_HEROKU, process.env.FRONTEND_LOCALHOST]
 };
 
 app.use(express.json());
