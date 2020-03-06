@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const articleSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
-    title: { type: String, required: true, unique: true },
+    title: { type: String, required: true, unique: true, trim: true },
     categories: String,
     subCategories: [],
     blocks: [],
