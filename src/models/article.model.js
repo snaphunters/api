@@ -1,13 +1,21 @@
 const mongoose = require("mongoose");
 
+const blockSchema = new mongoose.Schema({
+  content: { type: String, required: true }
+});
+
+const topicSubtopicSchema = new mongoose.Schema({
+  title: { type: String, required: true, unique: true },
+  type: String,
+  blocks: [blockSchema]
+});
+
 const articleSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
     title: { type: String, required: true, unique: true, trim: true },
-    categories: String,
-    subCategories: [],
-    blocks: [],
-    published: { type: Boolean, default: false }
+    topicAndSubtopicArray: [topicSubtopicSchema],
+    isPublished: { type: Boolean, default: false }
   },
   { timestamps: true }
 );
