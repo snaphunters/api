@@ -1,13 +1,9 @@
 const mongoose = require("mongoose");
 
-const blockSchema = new mongoose.Schema({
-  content: { type: String, required: true }
-});
-
 const topicSubtopicSchema = new mongoose.Schema({
   title: { type: String, required: true, unique: true },
   type: String,
-  blocks: [blockSchema]
+  blockArray: []
 });
 
 const articleSchema = new mongoose.Schema(
