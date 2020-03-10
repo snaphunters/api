@@ -27,6 +27,10 @@ router.use((err, req, res, next) => {
   if (err.name === "ValidationError") {
     err.statusCode = 400;
   }
+  if (err.name === "MongoError") {
+    err.statusCode = 422;
+    err.message = "Duplicate Title Error.";
+  }
   next(err);
 });
 

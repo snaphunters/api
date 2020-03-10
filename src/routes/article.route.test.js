@@ -27,7 +27,30 @@ describe("article.route.js", () => {
     await mongoServer.stop();
   });
 
-  beforeEach(async () => {});
+  beforeEach(async () => {
+    const mockArticle = {
+      isPublished: false,
+      _id: "5e660cefd4d9040017bc061e",
+      title: "asdefrrrrrr",
+      topicAndSubtopicArray: [
+        {
+          blockArray: ["<p>sdjkadjaksdjaskjdkasdj</p>"],
+          _id: "5e660cefd4d9040017bc061f",
+          title: "asdefrrrrrr"
+        },
+        {
+          blockArray: ["<p>;l'g;ldfkgl;dfkgl;dfkgl;dfkgl;dkg;</p>"],
+          _id: "5e660cefd4d9040017bc0620",
+          title: "mcncncncnc"
+        }
+      ],
+      id: "411b3f25-f2b0-453e-8319-927590220ad0",
+      createdAt: "2020-03-09T09:31:27.519Z",
+      updatedAt: "2020-03-09T09:31:27.519Z",
+      __v: 0
+    };
+    await Article.create(mockArticle);
+  });
 
   afterEach(async () => {
     jest.resetAllMocks();
@@ -53,6 +76,37 @@ describe("article.route.js", () => {
       .expect(400);
     expect(err).toEqual({
       error: "Article validation failed: title: Path `title` is required."
+    });
+  });
+
+  it("POST / should return message 422 as validation error when title is a duplicate", async () => {
+    const mockArticle = {
+      isPublished: false,
+      _id: "5e660cefd4d9040017bc061e",
+      title: "asdefrrrrrr",
+      topicAndSubtopicArray: [
+        {
+          blockArray: ["<p>sdjkadjaksdjaskjdkasdj</p>"],
+          _id: "5e660cefd4d9040017bc061f",
+          title: "asdefrrrrrr"
+        },
+        {
+          blockArray: ["<p>;l'g;ldfkgl;dfkgl;dfkgl;dfkgl;dkg;</p>"],
+          _id: "5e660cefd4d9040017bc0620",
+          title: "mcncncncnc"
+        }
+      ],
+      id: "411b3f25-f2b0-453e-8319-927590220ad0",
+      createdAt: "2020-03-09T09:31:27.519Z",
+      updatedAt: "2020-03-09T09:31:27.519Z",
+      __v: 0
+    };
+    const { body: err } = await request(app)
+      .post("/articles")
+      .send(mockArticle)
+      .expect(422);
+    expect(err).toEqual({
+      error: "Duplicate Title Error."
     });
   });
 
