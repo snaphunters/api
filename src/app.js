@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const articleRouter = require("./routes/article.route");
+const draftRouter = require("./routes/article.route");
 const cors = require("cors");
 
 const corsOptions = {
@@ -12,7 +12,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use("/articles", articleRouter);
+app.use("/articles", draftRouter);
 
 app.get("/", (req, res) => {
   res.send({

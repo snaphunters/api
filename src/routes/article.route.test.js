@@ -2,7 +2,7 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
-const Article = require("../models/article.model");
+const { Draft } = require("../models/article.model");
 const app = require("../app");
 
 mongoose.set("useNewUrlParser", true);
@@ -49,12 +49,12 @@ describe("article.route.js", () => {
       updatedAt: "2020-03-09T09:31:27.519Z",
       __v: 0
     };
-    await Article.create(mockArticle);
+    await Draft.create(mockArticle);
   });
 
   afterEach(async () => {
     jest.resetAllMocks();
-    await Article.deleteMany();
+    await Draft.deleteMany();
   });
 
   it("POST /articles should return message 201 created and the article posted", async () => {
@@ -75,7 +75,7 @@ describe("article.route.js", () => {
       .send(mockArticle)
       .expect(400);
     expect(err).toEqual({
-      error: "Article validation failed: title: Path `title` is required."
+      error: "Draft validation failed: title: Path `title` is required."
     });
   });
 
@@ -114,9 +114,9 @@ describe("article.route.js", () => {
     const mockArticle = {
       title: "This is a test article"
     };
-    const origFunction = Article.init;
-    Article.init = jest.fn();
-    Article.init.mockImplementationOnce(() => {
+    const origFunction = Draft.init;
+    Draft.init = jest.fn();
+    Draft.init.mockImplementationOnce(() => {
       throw new Error();
     });
     const { body: err } = await request(app)
@@ -126,7 +126,7 @@ describe("article.route.js", () => {
     expect(err).toEqual({
       error: "Internal server error."
     });
-    Article.init = origFunction;
+    Draft.init = origFunction;
   });
   it("GET /articles should return message 200 ok and all the articles posted", async () => {
     const mockArticles = [
@@ -137,9 +137,9 @@ describe("article.route.js", () => {
         title: "This is article two"
       }
     ];
-    const origFunction = Article.find;
-    Article.find = jest.fn();
-    Article.find.mockImplementationOnce(() => {
+    const origFunction = Draft.find;
+    Draft.find = jest.fn();
+    Draft.find.mockImplementationOnce(() => {
       return mockArticles;
     });
     const { body: articleCollection } = await request(app)
@@ -152,6 +152,6 @@ describe("article.route.js", () => {
       ])
     );
 
-    Article.find = origFunction;
+    Draft.find = origFunction;
   });
 });

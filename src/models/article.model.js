@@ -16,6 +16,7 @@ const articleSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Article = mongoose.model("Article", articleSchema);
+const Draft = mongoose.model("Draft", articleSchema);
+const Publish = mongoose.model("Publish", articleSchema);
 
-module.exports = Article;
+module.exports = { Draft, Publish };

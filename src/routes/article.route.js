@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const Article = require("../models/article.model");
+const { Draft } = require("../models/article.model");
 const wrapAsync = require("../utils/wrapAsync");
 const { v4: uuidv4 } = require("uuid");
 
 router.post(
   "/",
   wrapAsync(async (req, res, next) => {
-    const newArticle = new Article(req.body);
-    await Article.init();
+    const newArticle = new Draft(req.body);
+    await Draft.init();
     newArticle.id = uuidv4();
     await newArticle.save();
     res.status(201).send(newArticle);
@@ -18,7 +18,7 @@ router.post(
 router.get(
   "/",
   wrapAsync(async (req, res, next) => {
-    const articleCollection = await Article.find();
+    const articleCollection = await Draft.find();
     res.status(200).send(articleCollection);
   })
 );
