@@ -1,7 +1,7 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
-
+const Category = require("../models/category.model");
 const { Draft } = require("../models/article.model");
 const app = require("../app");
 
@@ -47,19 +47,37 @@ describe("article.route.js", () => {
       id: "411b3f25-f2b0-453e-8319-927590220ad0",
       createdAt: "2020-03-09T09:31:27.519Z",
       updatedAt: "2020-03-09T09:31:27.519Z",
+      category: "lemonade",
       __v: 0
     };
     await Draft.create(mockArticle);
+    await Category.create({
+      name: mockArticle.category
+    });
   });
 
   afterEach(async () => {
     jest.resetAllMocks();
     await Draft.deleteMany();
+    await Category.deleteMany();
   });
 
   it("POST /articles should return message 201 created and the article posted", async () => {
     const mockArticle = {
-      title: "This is a test article"
+      title: "This is the test article",
+      id: "411b3f25-f2b0-453e-8319-827590220ad0"
+    };
+    const { body } = await request(app)
+      .post("/articles")
+      .send(mockArticle)
+      .expect(201);
+    expect(body).toMatchObject(mockArticle);
+  });
+  it("POST /articles with categories that are already in the DB should return message 201 created and the article posted", async () => {
+    const mockArticle = {
+      title: "This is the test article",
+      id: "411b3f25-f2b0-453e-8319-727590220ad0",
+      category: "lemonade"
     };
     const { body } = await request(app)
       .post("/articles")
@@ -75,7 +93,8 @@ describe("article.route.js", () => {
       .send(mockArticle)
       .expect(400);
     expect(err).toEqual({
-      error: "Draft validation failed: title: Path `title` is required."
+      error:
+        "Draft validation failed: title: Path `title` is required., id: Path `id` is required."
     });
   });
 
