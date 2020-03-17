@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { Draft } = require("../models/article.model");
+const { Publish } = require("../models/article.model");
 const Category = require("../models/category.model");
 const wrapAsync = require("../utils/wrapAsync");
 
 router.post(
   "/",
   wrapAsync(async (req, res, next) => {
-    await Draft.init();
-    const newArticle = new Draft(req.body);
+    await Publish.init();
+    const newArticle = new Publish(req.body);
     await newArticle.save();
 
     const categoryName = req.body.category;
@@ -36,16 +36,8 @@ router.post(
 router.get(
   "/",
   wrapAsync(async (req, res, next) => {
-    const articleCollection = await Draft.find();
+    const articleCollection = await Publish.find();
     res.status(200).send(articleCollection);
-  })
-);
-
-router.get(
-  "/:articleTitle",
-  wrapAsync(async (req, res, next) => {
-    const article = await Draft.find({ title: req.params.articleTitle });
-    res.status(200).send(article);
   })
 );
 

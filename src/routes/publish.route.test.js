@@ -2,7 +2,7 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const Category = require("../models/category.model");
-const { Draft } = require("../models/article.model");
+const { Publish } = require("../models/article.model");
 const app = require("../app");
 
 mongoose.set("useNewUrlParser", true);
@@ -10,7 +10,7 @@ mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 mongoose.set("useUnifiedTopology", true);
 
-describe("article.route.js", () => {
+describe("publish.route.js", () => {
   let mongoServer;
   beforeAll(async () => {
     try {
@@ -50,7 +50,7 @@ describe("article.route.js", () => {
       category: "lemonade",
       __v: 0
     };
-    await Draft.create(mockArticle);
+    await Publish.create(mockArticle);
     await Category.create({
       name: mockArticle.category
     });
@@ -58,29 +58,29 @@ describe("article.route.js", () => {
 
   afterEach(async () => {
     jest.resetAllMocks();
-    await Draft.deleteMany();
+    await Publish.deleteMany();
     await Category.deleteMany();
   });
 
-  it("POST /articles should return message 201 created and the article posted", async () => {
+  it("POST /publish should return message 201 created and the article posted", async () => {
     const mockArticle = {
-      title: "This is the test article",
+      title: "This is the test published article",
       id: "411b3f25-f2b0-453e-8319-827590220ad0"
     };
     const { body } = await request(app)
-      .post("/articles")
+      .post("/publish")
       .send(mockArticle)
       .expect(201);
     expect(body).toMatchObject(mockArticle);
   });
-  it("POST /articles with categories that are already in the DB should return message 201 created and the article posted", async () => {
+  it("POST /publish with categories that are already in the DB should return message 201 created and the article posted", async () => {
     const mockArticle = {
       title: "This is the test article",
       id: "411b3f25-f2b0-453e-8319-727590220ad0",
       category: "lemonade"
     };
     const { body } = await request(app)
-      .post("/articles")
+      .post("/publish")
       .send(mockArticle)
       .expect(201);
     expect(body).toMatchObject(mockArticle);
@@ -89,12 +89,12 @@ describe("article.route.js", () => {
   it("POST / should return message 400 as validation error when title is not given", async () => {
     const mockArticle = {};
     const { body: err } = await request(app)
-      .post("/articles")
+      .post("/publish")
       .send(mockArticle)
       .expect(400);
     expect(err).toEqual({
       error:
-        "Draft validation failed: title: Path `title` is required., id: Path `id` is required."
+        "Publish validation failed: title: Path `title` is required., id: Path `id` is required."
     });
   });
 
@@ -121,7 +121,7 @@ describe("article.route.js", () => {
       __v: 0
     };
     const { body: err } = await request(app)
-      .post("/articles")
+      .post("/publish")
       .send(mockArticle)
       .expect(422);
     expect(err).toEqual({
@@ -133,21 +133,21 @@ describe("article.route.js", () => {
     const mockArticle = {
       title: "This is a test article"
     };
-    const origFunction = Draft.init;
-    Draft.init = jest.fn();
-    Draft.init.mockImplementationOnce(() => {
+    const origFunction = Publish.init;
+    Publish.init = jest.fn();
+    Publish.init.mockImplementationOnce(() => {
       throw new Error();
     });
     const { body: err } = await request(app)
-      .post("/articles")
+      .post("/publish")
       .send(mockArticle)
       .expect(500);
     expect(err).toEqual({
       error: "Internal server error."
     });
-    Draft.init = origFunction;
+    Publish.init = origFunction;
   });
-  it("GET /articles should return message 200 ok and all the articles posted", async () => {
+  it("GET /publish should return message 200 ok and all the articles posted", async () => {
     const mockArticles = [
       {
         title: "This is article one"
@@ -156,13 +156,13 @@ describe("article.route.js", () => {
         title: "This is article two"
       }
     ];
-    const origFunction = Draft.find;
-    Draft.find = jest.fn();
-    Draft.find.mockImplementationOnce(() => {
+    const origFunction = Publish.find;
+    Publish.find = jest.fn();
+    Publish.find.mockImplementationOnce(() => {
       return mockArticles;
     });
     const { body: articleCollection } = await request(app)
-      .get("/articles")
+      .get("/publish")
       .expect(200);
     expect(articleCollection).toEqual(
       expect.arrayContaining([
@@ -171,13 +171,6 @@ describe("article.route.js", () => {
       ])
     );
 
-    Draft.find = origFunction;
-  });
-
-  it("GET /articles/:articleTitle should return the correct article", async () => {
-    const { body: articleCollection } = await request(app)
-      .get("/articles/asdefrrrrrr")
-      .expect(200);
-    expect(articleCollection[0].title).toEqual("asdefrrrrrr");
+    Publish.find = origFunction;
   });
 });
