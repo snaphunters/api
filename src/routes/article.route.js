@@ -23,6 +23,14 @@ router.get(
   })
 );
 
+router.get(
+  "/:articleTitle",
+  wrapAsync(async (req, res, next) => {
+    const article = await Draft.find({ title: req.params.articleTitle });
+    res.status(200).send(article);
+  })
+);
+
 router.use((err, req, res, next) => {
   if (err.name === "ValidationError") {
     err.statusCode = 400;

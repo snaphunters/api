@@ -154,4 +154,11 @@ describe("article.route.js", () => {
 
     Draft.find = origFunction;
   });
+
+  it("GET /articles/:articleTitle should return the correct article", async () => {
+    const { body: articleCollection } = await request(app)
+      .get("/articles/asdefrrrrrr")
+      .expect(200);
+    expect(articleCollection[0].title).toEqual("asdefrrrrrr");
+  });
 });
