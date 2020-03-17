@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const draftRouter = require("./routes/article.route");
+const publishRouter = require("./routes/publish.route");
 const categoryRouter = require("./routes/category.route");
 const cors = require("cors");
 
@@ -14,6 +15,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/articles", draftRouter);
+app.use("/publish", publishRouter);
 app.use("/categories", categoryRouter);
 
 app.get("/", (req, res) => {
