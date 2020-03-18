@@ -37,6 +37,21 @@ router.post(
   })
 );
 
+router.patch(
+  "/update/:articleId",
+  wrapAsync(async (req, res, next) => {
+    const updatedContent = req.body;
+    const article = await Draft.findOneAndUpdate(
+      {
+        id: req.params.articleId
+      },
+      updatedContent,
+      { new: true }
+    );
+    res.status(200).send(article);
+  })
+);
+
 router.get(
   "/",
   wrapAsync(async (req, res, next) => {

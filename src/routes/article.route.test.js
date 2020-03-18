@@ -180,4 +180,31 @@ describe("article.route.js", () => {
       .expect(200);
     expect(articleCollection[0].title).toEqual("asdefrrrrrr");
   });
+
+  it("PATCH /articles/update/:articleId should patch the correct article", async () => {
+    const updatedArticle = {
+      isPublished: false,
+      _id: "5e660cefd4d9040017bc061e",
+      title: "Nicholas hihi",
+      topicAndSubtopicArray: [
+        {
+          blockArray: ["<p>Jon jon </p>"],
+          _id: "5e660cefd4d9040017bc061f",
+          title: "Nicholas hihi"
+        },
+        {
+          blockArray: ["<p>;l'g;ldfkgl;dfkgl;dfkgl;dfkgl;dkg;</p>"],
+          _id: "5e660cefd4d9040017bc0620",
+          title: "mcncncncnc"
+        }
+      ],
+      id: "411b3f25-f2b0-453e-8319-927590220ad0",
+      __v: 0
+    };
+    const response = await request(app)
+      .patch(`/articles/update/${updatedArticle.id}`)
+      .send(updatedArticle)
+      .expect(200);
+    expect(response.body).toMatchObject(updatedArticle);
+  });
 });
