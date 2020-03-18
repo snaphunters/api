@@ -22,6 +22,15 @@ router.get(
     res.status(200).send(articleCollection);
   })
 );
+router.get(
+  "/:articleId",
+  wrapAsync(async (req, res, next) => {
+    const singleArticle = await Publish.find({
+      id: req.params.articleId
+    });
+    res.status(200).send(singleArticle);
+  })
+);
 router.patch(
   "/update/:articleId",
   wrapAsync(async (req, res, next) => {

@@ -173,6 +173,27 @@ describe("publish.route.js", () => {
 
     Publish.find = origFunction;
   });
+  it("GET /publish/:articleId should get by id with 200 ok", async () => {
+    const mockArticles = [
+      {
+        title: "This is article one",
+        id: "411b3f25-f2b0-453e-8319-927590220ad0"
+      }
+    ];
+    const origFunction = Publish.find;
+    Publish.find = jest.fn();
+    Publish.find.mockImplementationOnce(() => {
+      return mockArticles;
+    });
+    const { body: articleCollection } = await request(app)
+      .get(`/publish/${mockArticles.id}`)
+      .expect(200);
+    expect(articleCollection).toEqual(
+      expect.arrayContaining([expect.objectContaining(mockArticles[0])])
+    );
+
+    Publish.find = origFunction;
+  });
   it("PATCH should update current published article with newly-edited version", async () => {
     const updatedArticle = {
       isPublished: false,
