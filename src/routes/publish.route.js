@@ -22,6 +22,20 @@ router.get(
     res.status(200).send(articleCollection);
   })
 );
+router.patch(
+  "/update/:articleId",
+  wrapAsync(async (req, res, next) => {
+    const publishingArticle = req.body;
+    const updatePublishedArticle = await Publish.findOneAndUpdate(
+      {
+        id: req.params.articleId
+      },
+      publishingArticle,
+      { new: true }
+    );
+    res.status(200).send(updatePublishedArticle);
+  })
+);
 
 router.use((err, req, res, next) => {
   if (err.name === "ValidationError") {

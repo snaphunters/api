@@ -173,4 +173,30 @@ describe("publish.route.js", () => {
 
     Publish.find = origFunction;
   });
+  it("PATCH should update current published article with newly-edited version", async () => {
+    const updatedArticle = {
+      isPublished: false,
+      _id: "5e660cefd4d9040017bc061e",
+      title: "Super Duper",
+      topicAndSubtopicArray: [
+        {
+          blockArray: ["<p>Hungry bunny</p>"],
+          _id: "5e660cefd4d9040017bc061f",
+          title: "Mama Lemon"
+        },
+        {
+          blockArray: ["<p>;l'g;ldfkgl;dfkgl;dfkgl;dfkgl;dkg;</p>"],
+          _id: "5e660cefd4d9040017bc0620",
+          title: "mcncncncnc"
+        }
+      ],
+      id: "411b3f25-f2b0-453e-8319-927590220ad0",
+      __v: 0
+    };
+    const response = await request(app)
+      .patch(`/publish/update/${updatedArticle.id}`)
+      .send(updatedArticle)
+      .expect(200);
+    expect(response.body).toMatchObject(updatedArticle);
+  });
 });
