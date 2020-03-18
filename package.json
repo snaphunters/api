@@ -7,7 +7,8 @@
     "test": "jest --watchAll",
     "test:coverage": "jest --coverage --watchAll=false",
     "start": "node src/index.js",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "start:dev": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,8 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "mongodb-memory-server": "^6.3.1",
+    "mongodb-memory-server": "^6.3.3",
+    "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2"
   },

@@ -9,7 +9,6 @@ router.post(
     await Publish.init();
     const newArticle = new Publish(req.body);
     await newArticle.save();
-
     res
       .status(201)
       .send({ ...newArticle.toObject(), category: req.body.category });

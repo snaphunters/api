@@ -11,11 +11,15 @@ router.post(
     const newArticle = new Draft(req.body);
     await newArticle.save();
 
-    const categoryName = req.body.category;
+    let categoryName = req.body.category;
+    if (categoryName === undefined) {
+      categoryName = "Uncategorized";
+    }
     await Category.init();
     const categoryPresent = await Category.find({
       name: categoryName
     });
+
     if (categoryPresent.length === 0) {
       const newCategory = new Category({
         name: categoryName,
