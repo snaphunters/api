@@ -73,6 +73,7 @@ describe("article.route.js", () => {
       .expect(201);
     expect(body).toMatchObject(mockArticle);
   });
+
   it("POST /articles with categories that are already in the DB should return message 201 created and the article posted", async () => {
     const mockArticle = {
       title: "This is the test article",
@@ -206,5 +207,32 @@ describe("article.route.js", () => {
       .send(updatedArticle)
       .expect(200);
     expect(response.body).toMatchObject(updatedArticle);
+  });
+  it("DELETE /:articleTitle should return ", async () => {
+    const expectedData = {
+      __v: 0,
+      _id: "5e660cefd4d9040017bc061e",
+      createdAt: "2020-03-09T09:31:27.519Z",
+      id: "411b3f25-f2b0-453e-8319-927590220ad0",
+      isPublished: false,
+      title: "asdefrrrrrr",
+      topicAndSubtopicArray: [
+        {
+          _id: "5e660cefd4d9040017bc061f",
+          blockArray: ["<p>sdjkadjaksdjaskjdkasdj</p>"],
+          title: "asdefrrrrrr"
+        },
+        {
+          _id: "5e660cefd4d9040017bc0620",
+          blockArray: ["<p>;l'g;ldfkgl;dfkgl;dfkgl;dfkgl;dkg;</p>"],
+          title: "mcncncncnc"
+        }
+      ],
+      updatedAt: "2020-03-09T09:31:27.519Z"
+    };
+    const { body: articleCollection } = await request(app)
+      .delete(`/articles/asdefrrrrrr`)
+      .expect(200);
+    expect(articleCollection).toMatchObject(expectedData);
   });
 });

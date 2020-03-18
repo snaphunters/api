@@ -68,6 +68,16 @@ router.get(
   })
 );
 
+router.delete(
+  "/:articleTitle",
+  wrapAsync(async (req, res, next) => {
+    const articleToDelete = await Draft.findOneAndDelete({
+      title: req.params.articleTitle
+    });
+    res.status(200).send(articleToDelete);
+  })
+);
+
 router.use((err, req, res, next) => {
   if (err.name === "ValidationError") {
     err.statusCode = 400;
