@@ -46,7 +46,7 @@ router.patch(
         id: req.params.articleId
       },
       updatedContent,
-      { new: true }
+      { new: true, runValidators: true }
     );
     res.status(200).send(article);
   })
