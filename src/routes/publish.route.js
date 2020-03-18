@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { Publish } = require("../models/article.model");
-const Category = require("../models/category.model");
 const wrapAsync = require("../utils/wrapAsync");
 
 router.post(
@@ -11,25 +10,9 @@ router.post(
     const newArticle = new Publish(req.body);
     await newArticle.save();
 
-    const categoryName = req.body.category;
-    await Category.init();
-    const categoryPresent = await Category.find({
-      name: categoryName
-    });
-    if (categoryPresent.length === 0) {
-      const newCategory = new Category({
-        name: categoryName,
-        topicIdArray: [req.body.id]
-      });
-      await newCategory.save();
-    } else {
-      await Category.findOneAndUpdate(
-        { name: categoryName },
-        { $push: { topicIdArray: req.body.id } },
-        { runValidators: true }
-      );
-    }
-    res.status(201).send({ ...newArticle.toObject(), category: categoryName });
+    res
+      .status(201)
+      .send({ ...newArticle.toObject(), category: req.body.category });
   })
 );
 
