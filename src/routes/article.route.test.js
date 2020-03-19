@@ -50,10 +50,11 @@ describe("article.route.js", () => {
       category: "lemonade",
       __v: 0
     };
-    await Draft.create(mockArticle);
     await Category.create({
-      name: mockArticle.category
+      name: mockArticle.category,
+      topicIdArray: ["411b3f25-f2b0-453e-8319-927590220ad0"]
     });
+    await Draft.create(mockArticle);
   });
 
   afterEach(async () => {
@@ -180,6 +181,13 @@ describe("article.route.js", () => {
       .get("/articles/asdefrrrrrr")
       .expect(200);
     expect(articleCollection[0].title).toEqual("asdefrrrrrr");
+  });
+
+  it("GET /articles/:articleTitle should return the right category", async () => {
+    const { body: articleCollection } = await request(app)
+      .get("/articles/asdefrrrrrr")
+      .expect(200);
+    expect(articleCollection.category).toEqual("lemonade");
   });
 
   it("PATCH /articles/update/:articleId should patch the correct article", async () => {

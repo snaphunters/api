@@ -63,8 +63,17 @@ router.get(
 router.get(
   "/:articleTitle",
   wrapAsync(async (req, res, next) => {
-    const article = await Draft.find({ title: req.params.articleTitle });
-    res.status(200).send(article);
+    const foundArticle = await Draft.find({ title: req.params.articleTitle });
+    const articleId = foundArticle[0].id;
+    const findAllCategories = await Category.find({});
+    console.log(findAllCategories);
+    const tempArray = findAllCategories.map(categoryObject =>
+      categoryObject.topicIdArray.includes(articleId)
+        ? categoryObject.name
+        : "Uncategorized"
+    );
+    const category = tempArray[0];
+    res.send({ ...foundArticle, category: category });
   })
 );
 
