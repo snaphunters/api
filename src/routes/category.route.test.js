@@ -32,7 +32,11 @@ describe("category.route.js", () => {
         name: "lemonade"
       },
       {
-        name: "lemonade2"
+        name: "Getting Started",
+        topicIdArray: [
+          "49c6a924-5ddb-4939-ab88-e941aee93485",
+          "30d6cd29-155f-4f51-af53-985a2bb32425"
+        ]
       }
     ];
     await Category.create(mockCategory);
@@ -44,6 +48,13 @@ describe("category.route.js", () => {
   });
   it("GET /categories should return 200 and a list of all the categories", async () => {
     const response = await request(app).get("/categories");
-    expect(response.body).toEqual(["lemonade", "lemonade2"]);
+    expect(response.body).toEqual(["lemonade", "Getting Started"]);
+  });
+  it("GET /categories/:name should return 200 and a list of all the topics in the category", async () => {
+    const response = await request(app).get("/categories/Getting Started");
+    expect(response.body).toEqual([
+      "49c6a924-5ddb-4939-ab88-e941aee93485",
+      "30d6cd29-155f-4f51-af53-985a2bb32425"
+    ]);
   });
 });

@@ -15,5 +15,16 @@ router.get(
     res.status(200).send(categoriesList);
   })
 );
+router.get(
+  "/:name",
+  wrapAsync(async (req, res, next) => {
+    const projections = "topicIdArray -_id";
+    const { topicIdArray } = await Category.findOne(
+      { name: req.params.name },
+      projections
+    );
+    res.status(200).send(topicIdArray);
+  })
+);
 
 module.exports = router;
