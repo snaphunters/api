@@ -12,7 +12,7 @@ router.post(
     await newArticle.save();
 
     let categoryName = req.body.category;
-    if (categoryName === undefined) {
+    if (categoryName === "" || categoryName === undefined) {
       categoryName = "Uncategorized";
     }
     await Category.init();
@@ -48,6 +48,7 @@ router.patch(
       updatedContent,
       { new: true, runValidators: true }
     );
+
     res.status(200).send(article);
   })
 );
@@ -65,8 +66,7 @@ router.get(
   wrapAsync(async (req, res, next) => {
     const foundArticle = await Draft.find({ title: req.params.articleTitle });
     const articleId = foundArticle[0].id;
-    const findAllCategories = await Category.find({});
-    console.log(findAllCategories);
+    const findAllCategories = await Category.find();
     const tempArray = findAllCategories.map(categoryObject =>
       categoryObject.topicIdArray.includes(articleId)
         ? categoryObject.name

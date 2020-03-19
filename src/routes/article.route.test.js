@@ -88,7 +88,7 @@ describe("article.route.js", () => {
     expect(body).toMatchObject(mockArticle);
   });
 
-  it("POST / should return message 400 as validation error when title is not given", async () => {
+  it("POST / should return message 400 when as validation error when title is not given", async () => {
     const mockArticle = {};
     const { body: err } = await request(app)
       .post("/articles")

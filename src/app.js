@@ -12,7 +12,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json({ limit: "2MB" }));
+app.use(express.json({ limit: "10MB" }));
 
 app.use("/articles", draftRouter);
 app.use("/publish", publishRouter);
