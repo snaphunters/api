@@ -50,10 +50,16 @@ describe("article.route.js", () => {
       category: "lemonade",
       __v: 0
     };
-    await Category.create({
-      name: mockArticle.category,
-      topicIdArray: ["411b3f25-f2b0-453e-8319-927590220ad0"]
-    });
+    await Category.create(
+      {
+        name: mockArticle.category,
+        topicIdArray: ["411b3f25-f2b0-453e-8319-927590220ad0"]
+      },
+      {
+        name: "cola",
+        topicIdArray: []
+      }
+    );
     await Draft.create(mockArticle);
   });
 
@@ -242,5 +248,47 @@ describe("article.route.js", () => {
       .delete(`/articles/asdefrrrrrr`)
       .expect(200);
     expect(articleCollection).toMatchObject(expectedData);
+  });
+
+  it("PATCH /articles/update/:articleId should update the category of article", async () => {
+    const updatedArticle = {
+      category: "cola",
+      isPublished: false,
+      _id: "5e660cefd4d9040017bc061e",
+      title: "Nicholas hihi",
+      topicAndSubtopicArray: [
+        {
+          blockArray: ["<p>Jon jon </p>"],
+          _id: "5e660cefd4d9040017bc061f",
+          title: "Nicholas hihi"
+        },
+        {
+          blockArray: ["<p>;l'g;ldfkgl;dfkgl;dfkgl;dfkgl;dkg;</p>"],
+          _id: "5e660cefd4d9040017bc0620",
+          title: "mcncncncnc"
+        }
+      ],
+      id: "411b3f25-f2b0-453e-8319-927590220ad0",
+      __v: 0
+    };
+    await request(app)
+      .patch(`/articles/update/${updatedArticle.id}`)
+      .send(updatedArticle)
+      .expect(200);
+    const categoryAddedTo = await Category.findOne(
+      { name: "cola" },
+      "name topicIdArray"
+    );
+    const categoryRemovedFrom = await Category.findOne(
+      { name: "lemonade" },
+      "name topicIdArray"
+    );
+    expect(
+      categoryRemovedFrom.topicIdArray.includes(updatedArticle.id)
+    ).toBeFalsy();
+    expect(
+      categoryAddedTo.topicIdArray.includes(updatedArticle.id)
+    ).toBeTruthy();
+    //expect(response.body).toMatchObject(updatedArticle);
   });
 });

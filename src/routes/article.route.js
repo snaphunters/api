@@ -48,6 +48,21 @@ router.patch(
       updatedContent,
       { new: true, runValidators: true }
     );
+    const allCategories = await Category.find();
+    const oldCategory = allCategories.filter(categoryObject =>
+      categoryObject.topicIdArray.includes(req.params.articleId)
+    )[0];
+    await Category.findOneAndUpdate(
+      { name: req.body.category },
+      { $push: { topicIdArray: req.params.articleId } },
+      { runValidators: true }
+    );
+
+    await Category.findOneAndUpdate(
+      { name: oldCategory.name },
+      { $pull: { topicIdArray: req.params.articleId } },
+      { runValidators: true }
+    );
 
     res.status(200).send(article);
   })

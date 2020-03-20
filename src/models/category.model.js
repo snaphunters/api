@@ -10,8 +10,7 @@ const categorySchema = new mongoose.Schema({
   topicIdArray: [
     {
       type: String,
-      minlength: 32,
-      unique: true
+      minlength: 32
     }
   ]
 });
