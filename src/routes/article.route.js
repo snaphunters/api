@@ -49,21 +49,20 @@ router.patch(
       { new: true, runValidators: true }
     );
     const allCategories = await Category.find();
-    const oldCategory = allCategories.filter(categoryObject =>
+    let oldCategory = allCategories.filter(categoryObject =>
       categoryObject.topicIdArray.includes(req.params.articleId)
     )[0];
-    await Category.findOneAndUpdate(
-      { name: req.body.category },
-      { $push: { topicIdArray: req.params.articleId } },
-      { runValidators: true }
-    );
-
     await Category.findOneAndUpdate(
       { name: oldCategory.name },
       { $pull: { topicIdArray: req.params.articleId } },
       { runValidators: true }
     );
-
+    await Category.findOneAndUpdate(
+      { name: req.body.category },
+      { $push: { topicIdArray: req.params.articleId } },
+      { runValidators: true }
+    );
+    oldCategory = "";
     res.status(200).send(article);
   })
 );
@@ -82,12 +81,17 @@ router.get(
     const foundArticle = await Draft.find({ title: req.params.articleTitle });
     const articleId = foundArticle[0].id;
     const findAllCategories = await Category.find();
-    const tempArray = findAllCategories.map(categoryObject =>
-      categoryObject.topicIdArray.includes(articleId)
-        ? categoryObject.name
-        : "Uncategorized"
-    );
+    const tempArray = findAllCategories
+      .map(categoryObject => {
+        if (categoryObject.topicIdArray.includes(articleId)) {
+          return categoryObject.name;
+        }
+      })
+      .filter(filtered => filtered !== undefined);
+    // ? categoryObject.name
+    // : "Uncategorized"
     const category = tempArray[0];
+    console.log(tempArray);
     res.send({ ...foundArticle, category: category });
   })
 );
