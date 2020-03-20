@@ -4,6 +4,11 @@ Express.js Server connected to MongoDB(mLab) hosted on Heroku.
 
 Provides data of the articles for the Help Center stored inside the database.
 
+### Package used :
+express: version 4.17.1
+mongoose: version 5.9.2 
+
+
 ## Routes
 
 ```
